@@ -161,9 +161,10 @@ class QueryConnectionPool:
 
         try:
             return await self._take_idle_or_build(deadline)
-        except Exception:
-            # Any failure to obtain a physical backend frees the borrower
-            # slot so the pool cannot deadlock after a failed rebuild.
+        except BaseException:
+            # Any failure -- including task cancellation during a rebuild --
+            # frees the borrower slot so the pool cannot deadlock or leak
+            # capacity after a failed acquire.
             self._slots.release()
             raise
 

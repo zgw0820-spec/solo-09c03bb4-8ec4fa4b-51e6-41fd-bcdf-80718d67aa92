@@ -40,6 +40,10 @@ class Settings:
     statement_timeout_grace_ms: int = _int("STATEMENT_TIMEOUT_GRACE_MS", 1250)
     # Hard cap on the request body so an analyst cannot submit huge payloads.
     max_sql_chars: int = _int("MAX_SQL_CHARS", 10_000)
+    # Admission control: the planner's estimated ``Total Cost`` of a single
+    # query, and the sum of estimates of all currently admitted (executing or
+    # finalising) queries, may not exceed this many PostgreSQL cost units.
+    max_query_cost: float = _float("MAX_QUERY_COST", 50_000.0)
 
 
 settings = Settings()

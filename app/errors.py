@@ -35,3 +35,27 @@ class QueryTimeout(QueryServiceError):
 
     code = "query_timeout"
     http_status = 504
+
+
+class PlanFailed(QueryServiceError):
+    """Raised when the planner could not produce a cost estimate.
+
+    Without a trustworthy estimate the statement must not be executed.
+    """
+
+    code = "plan_failed"
+    http_status = 503
+
+
+class QueryFailed(QueryServiceError):
+    """The admitted statement itself failed at execution time."""
+
+    code = "sql_error"
+    http_status = 400
+
+
+class CostLimitExceeded(QueryServiceError):
+    """Raised when the estimated cost would exceed the configured budget."""
+
+    code = "cost_limit_exceeded"
+    http_status = 429

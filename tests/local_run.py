@@ -69,6 +69,9 @@ def main() -> None:
 
     os.environ["DATABASE_DSN"] = ro_dsn
     os.environ["POOL_SIZE"] = "2"
+    # Tight budget so the self-test can exercise cumulative admission with
+    # two analyst-scale queries simultaneously.
+    os.environ.setdefault("MAX_QUERY_COST", "5000")
     # Exposed for tests/selftest.py's discard/rebuild chaos scenario.
     admin_dsn_path = pathlib.Path(tempfile.gettempdir()) / "faultdb_admin_dsn"
     admin_dsn_path.write_text(fault_admin_dsn, encoding="utf-8")
